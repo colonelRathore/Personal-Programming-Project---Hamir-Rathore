@@ -1,5 +1,5 @@
 import random
-from colorist import Color, Effect, green
+from colorist import Color, Effect, BrightColor, BgColor, BgBrightColor
 
 def GetNumPlayers():
     num_players = int(input("How many people are playing RISK today?\n"))
@@ -45,6 +45,13 @@ def CheckHighestRoll(rolls, player_names):
     print((player_names[roll_index]), "you got the highest roll!")
     return roll_index
 
+def Gen_Prov_List(num_players):
+    big_prov_list = []
+    for i in range (num_players):
+        big_prov_list.append([])
+    return big_prov_list
+
+
 def DisplayMap():
     world_map = """⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣄⣠⣀⡀⣀⣠⣤⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⢠⣠⣼⣿⣿⣿⣟⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⢠⣤⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⢦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -67,7 +74,7 @@ def DisplayMap():
     print(world_map)
 
 def DisplayProvinces():
-    provinces = """Alaska
+    provinces = f"""{BgColor.CYAN}Alaska{BgColor.OFF}
 Columbia
 Northwestern Territories
 Prairies
@@ -176,15 +183,22 @@ Somalialand
     print(provinces)
     return provinces
 
-def ClaimProvince(roll_index, player_names, num_players, player_colors, provinces):
+def ClaimProvince(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
+    roll_index = 0
     indx = 0
-    for i in range (num_players):
+    while provinces != """""":
         DisplayMap()
         DisplayProvinces()
-        print("The game has begun!", (player_names[indx]), ", what province do you want?")
+        print("The game has begun!", (player_names[roll_index]), ", what province do you want?")
         select = input()
         while select not in provinces:
             print("Please select a valid province:")
             DisplayProvinces()
             select = input()
-        
+        big_prov_list.insert(select, [roll_index, indx])
+        roll_index += 1
+        indx += 1
+        if roll_index > num_players - 1:
+            roll_index = 0
+
+DisplayProvinces()     
