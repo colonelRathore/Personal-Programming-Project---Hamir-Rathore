@@ -201,4 +201,9 @@ def ClaimProvince(roll_index, player_names, num_players, player_colors, big_prov
         if roll_index > num_players - 1:
             roll_index = 0
 
-DisplayProvinces()     
+def TakeTurn(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
+    playname = player_names[roll_index]
+    print(playname + "it's your turn!")
+
+def ChooseAction(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
+    
