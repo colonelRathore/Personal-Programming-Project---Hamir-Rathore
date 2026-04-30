@@ -205,5 +205,3 @@ def TakeTurn(roll_index, player_names, num_players, player_colors, big_prov_list
     playname = player_names[roll_index]
     print(playname + "it's your turn!")
 
-def ChooseAction(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
-    
