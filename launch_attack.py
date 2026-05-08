@@ -1,6 +1,7 @@
 from PreGameSetup import *
 from main import *
 from DisplayMap import *
+from playsound import *
 
 def Launch_Attack():
     print("You have chosen to launch an attack! Let's hope it's successful!")
@@ -15,10 +16,11 @@ def Select_Attack_Province(provinces, playname):
 
     return attack_choice
 
-def Display_Province_Stats(attack_choice):
+def Display_Province_Stats(attack_choice, provinces):
     print("What province's statistics would you like to inspect?")
     choise = input()
-    while choise not in 
+    while choise not in provinces:
+        choise = input()
 
 
 def Move_Troops_Attack(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
@@ -32,8 +34,8 @@ def Check_If_Province_Valid(roll_index, player_names, num_players, player_colors
 
 RollDice()
 
-def Play_War_Music(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
-    opt = ""
+def Play_War_Music():
+    
 
 def Find_Roll_Sum(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
     opt = ""
