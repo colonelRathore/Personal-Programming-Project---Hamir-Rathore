@@ -32,10 +32,10 @@ def Select_Attacker_Province(roll_index, player_names, num_players, player_color
 def Check_If_Province_Valid(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
     opt = ""
 
-RollDice()
+#RollDice()
 
 def Play_War_Music():
-    
+    playsound("leningrad.mp3")
 
 def Find_Roll_Sum(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
     opt = ""
@@ -67,3 +67,5 @@ def Check_Roll_Num(roll_index, player_names, num_players, player_colors, big_pro
 
 def Change_Army_Stats(roll_index, player_names, num_players, player_colors, big_prov_list, provinces):
     opt = ""
+
+Play_War_Music()
