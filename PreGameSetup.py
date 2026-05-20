@@ -83,3 +83,5 @@ def Init_Move_Troops(big_prov_list, provinces):
             mo_choise = input("Please enter a valid input! ")
     prov_with_commando = []
     prov_with_commando.append(mo_choise)
+
+GetNumPlayers()
