@@ -85,4 +85,4 @@ def Init_Move_Troops(big_prov_list, provinces):
     prov_with_commando.append(mo_choise)
 
 
-FetchPlayerNames(4)
+GetPlayersColors(["Bob", "Rob", "Greg"], 3)
