@@ -33,8 +33,8 @@ def RollDice(num_players, player_names, player_index):
         if roll_go == 'r':
             roll = random.randint(1,6)
         print((player_names[player_index]), "you rolled", roll)
+        player_index += 1
     rolls.append(roll)
-    player_index += 1
     return rolls
 
 def CheckHighestRoll(rolls, player_names):
