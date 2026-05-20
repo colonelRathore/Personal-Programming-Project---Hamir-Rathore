@@ -84,5 +84,5 @@ def Init_Move_Troops(big_prov_list, provinces):
     prov_with_commando = []
     prov_with_commando.append(mo_choise)
 
-
-GetPlayersColors(["Bob", "Rob", "Greg"], 3)
+player_names = ["Jerry", "Terry", "Gerry"]
+GetPlayersColors(player_names, 2)
