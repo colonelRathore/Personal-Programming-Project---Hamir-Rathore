@@ -29,7 +29,7 @@ def GetPlayersColors(player_names, num_players):
 def RollDice(num_players, player_names, player_index):
     rolls = []
     for i in range(num_players):
-        roll_go = input("Hello", (player_names[player_index]), "press r to roll your dice! ")
+        roll_go = input("Hello "  + (player_names[player_index]) + " press r to roll your dice! ")
         if roll_go == 'r':
             roll = random.randint(1,6)
         print((player_names[player_index]), "you rolled", roll)
