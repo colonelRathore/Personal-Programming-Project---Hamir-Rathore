@@ -84,5 +84,4 @@ def Init_Move_Troops(big_prov_list, provinces):
     prov_with_commando = []
     prov_with_commando.append(mo_choise)
 
-player_names = ["Jerry", "Terry", "Gerry"]
-GetPlayersColors(player_names, 2)
+RollDice(2, ["Bob", "Jerry"], 0)
