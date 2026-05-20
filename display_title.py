@@ -182,4 +182,4 @@ def load_credits():
     
 load_soldiers()
 load_title()
-load_credits()
+load_credits
