@@ -85,3 +85,4 @@ def Init_Move_Troops(big_prov_list, provinces):
     prov_with_commando.append(mo_choise)
 
 GetNumPlayers()
+FetchPlayerNames()
