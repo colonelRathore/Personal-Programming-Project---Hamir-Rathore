@@ -180,6 +180,3 @@ def load_credits():
          \|___|                   \/____/                                       \/____/                                           \|___|                   \/____/         
                                                                                                                                                                            """)
     
-load_soldiers()
-load_title()
-load_credits

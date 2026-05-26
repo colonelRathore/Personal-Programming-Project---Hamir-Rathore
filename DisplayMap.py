@@ -156,4 +156,3 @@ def DisplayProvinceOwner(roll_index, player_names, num_players, big_prov_list, p
     print("The province" + prov_choice + "is owned by" + own + ".")
     return own
 
-print(DisplayMap())
