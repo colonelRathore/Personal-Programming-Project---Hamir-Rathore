@@ -84,4 +84,5 @@ def Init_Move_Troops(big_prov_list, provinces):
     prov_with_commando = []
     prov_with_commando.append(mo_choise)
 
-RollDice(2, ["Bob", "Jerry"], 0)
+    return prov_with_commando
+
