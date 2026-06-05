@@ -1,5 +1,5 @@
 from main import *
-from colorist import Color, Effect, BrightColor, BgColor, BgBrightColor
+from colorist import *
 
 def DisplayProvinces():
     provinces = f"""{BgColor.CYAN}Alaska{BgColor.OFF}

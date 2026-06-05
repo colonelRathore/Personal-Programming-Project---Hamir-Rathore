@@ -60,7 +60,7 @@ def sumAttackRoll(choice1, choice2):
     
     return sum_attack
 
-def DefendRollDice(own):
+def DefendRollDice():
     choice1 = input("Press r to roll the dice the first time!!")
     while choice1 != "r" or "R":
         print("Please press r.")
@@ -127,10 +127,26 @@ Play_War_Music()
 def Find_Roll_Diff(sum_attack, sum_defend, attack_bigger):
     opt = ""
 
-def Exec_Battle():
-    ""
+def Exec_Battle(playname, owns, attack_bigger):
+    if attack_bigger == True:
+        print(f"{playname}, you won the battle!")
+        opt = input(f"{owns}, would you like to rally resistance? Press 1 to do so, press anything else to not.\nBe warned, if this fails, you will\nlose another province!")
+        if opt == "1":
+           roll = randint(1,6)
+           if roll == 6:
+               print(f"{owns}, you managed to rally resistance!")
+               print("Your province will live to see another day.")
+               attack_sucess = False
+           else:
+               attack_sucess = True
+               print(f"{owns}, you failed to rally resistance. The enemy invaders have overrun your territories. You will have to give up a province.")
+        else:
+            attack_sucess = True
+            print("Your province has fallen. Your flag no longer waves along the streets and patriotic songs no longer play along the byroads.")
 
-def Transfer_Province(big_prov_list, playname, owns):
+    return attack_sucess       
+                       
+def Transfer_Province(big_prov_list, playname, owns, attack_sucess):
     opt = ""
 
 RollDice()
@@ -142,3 +158,4 @@ def Change_Army_Stats(roll_index, player_names, num_players, player_colors, big_
     opt = ""
 
 Play_War_Music()
+
