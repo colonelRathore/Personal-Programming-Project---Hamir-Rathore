@@ -1,5 +1,7 @@
 import random
 
+global player_names, player_colors
+
 # ANSI Colors 
 class BgColor:
     CYAN = "\033[46m"  
