@@ -277,7 +277,7 @@ def DisplayTroopStatus(province_objects):
 # ==================== SETUP ====================
 def GetNumPlayers():
     num_players = int(input("How many people are playing RISK today?\n"))
-    while num_players < 0 or num_players > 6 or not num_players.isdigit() or float.is_integer(num_players):
+    while num_players < 0 or num_players > 6:
          num_players = int(input("How many people are playing RISK today?\n"))
     
     return num_players
