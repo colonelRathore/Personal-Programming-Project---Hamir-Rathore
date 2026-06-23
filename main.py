@@ -276,7 +276,11 @@ def DisplayTroopStatus(province_objects):
 
 # ==================== SETUP ====================
 def GetNumPlayers():
-    return int(input("How many people are playing RISK today?\n"))
+    num_players = int(input("How many people are playing RISK today?\n"))
+    while num_players < 0 or num_players > 6:
+         num_players = int(input("How many people are playing RISK today?\n"))
+    
+    return num_players
 
 def FetchPlayerNames(num_players):
     return [input(f"Player {i+1} name: ") for i in range(num_players)]
