@@ -282,25 +282,42 @@ def FetchPlayerNames(num_players):
     return [input(f"Player {i+1} name: ") for i in range(num_players)]
 
 def GetPlayersColors(player_names):
-    return [input(f"{name}, choose color: ").lower() for name in player_names]
+    colors = []
+    for name in player_names:
+        color = input(f"{name}, choose your color (red/green/blue/yellow/cyan/magenta/white): ").lower()
+        colors.append(color)
+    return colors
 
-def ClaimProvince(player_names, province_objects):
-    roll_index = 0
-    for _ in range(len(PROVINCES)):
-        DisplayMap()
-        DisplayProvinces()
-        player = player_names[roll_index]
-        print(f"{player}, what province do you want?")
-        select = input().strip()
-        for prov in province_objects:
-            if prov.name == select and prov.owner is None:
-                prov.owner = Player(player, "default")
-                print(f"{select} claimed by {player}!")
-                break
-        else:
-            print("Invalid province.")
-            continue
-        roll_index = (roll_index + 1) % len(player_names)
+def ClaimProvince(players, province_objects):
+    # Shuffle provinces for random distribution
+    import random
+    random.shuffle(PROVINCES)
+    
+    num_players = len(players)
+    provinces_per_player = len(PROVINCES) // num_players
+    extra_provinces = len(PROVINCES) % num_players
+    
+    province_index = 0
+    
+    print("\n=== Randomly Assigning Provinces ===\n")
+    
+    for i, player in enumerate(players):
+        # Give base number of provinces
+        num_to_give = provinces_per_player + (1 if i < extra_provinces else 0)
+        
+        for _ in range(num_to_give):
+            if province_index < len(PROVINCES):
+                prov_name = PROVINCES[province_index]
+                # Find the Province object
+                prov_obj = next((p for p in province_objects if p.name == prov_name), None)
+                if prov_obj:
+                    # Create Player object with color
+                    player_obj = next((pl for pl in players if pl.name == player), None)
+                    if player_obj:
+                        prov_obj.owner = player_obj
+                        player_obj.provinces.append(prov_obj)
+                        print(f"{prov_obj.name} assigned to {player}")
+                province_index += 1
 
 # ==================== ACTIONS ====================
 def is_adjacent(prov1, prov2):
@@ -352,7 +369,7 @@ def main():
     players = [Player(name, color) for name, color in zip(player_names, player_colors)]
     province_objects = [Province(name) for name in PROVINCES]
     
-    ClaimProvince(player_names, province_objects)
+    ClaimProvince(players, province_objects)
     
     print("\n=== GAME START ===")
     turn = 0
