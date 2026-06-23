@@ -1,7 +1,12 @@
 import random
 
+# ANSI Colors 
+class BgColor:
+    CYAN = "\033[46m"  
+    OFF = "\033[0m"     # Reset color
 
-# ANSI Colors for players
+COLOR_AVAILABLE = True
+
 class Colors:
     RESET = "\033[0m"
     CYAN = "\033[46m"      # Background cyan
@@ -92,8 +97,7 @@ ADJACENCY = {
 class Player:
     def __init__(self, name, color):
         self.name = name
-        self.color = color.lower()  # Store color name
-        self.ansi_color = COLOR_MAP.get(self.color, Colors.CYAN)
+        self.color = color
         self.provinces = []
 
 class Province:
@@ -219,10 +223,15 @@ def load_title():
          \|___|                   \/____/                  \/____/                  \|___|          
                                                                                                     """)
 
-def DisplayProvinces():
+def DisplayProvinces(province_objects=None):
     for p in PROVINCES:
-        if COLOR_AVAILABLE:
-            print(f"{BgColor.CYAN}{p}{BgColor.OFF}")
+        if province_objects:
+            prov = next((x for x in province_objects if x.name == p), None)
+            if prov and prov.owner:
+                color_code = prov.owner.ansi_color
+                print(f"{color_code}{p}{Colors.RESET}")
+            else:
+                print(p)
         else:
             print(p)
 
@@ -250,7 +259,8 @@ def DisplayProvinceOwner(province_objects, prov_name):
     for prov in province_objects:
         if prov.name == prov_name:
             if prov.owner:
-                print(f"{prov.name} is owned by {prov.owner.name}")
+                color_code = prov.owner.ansi_color
+                print(f"{color_code}{prov.name} is owned by {prov.owner.name}{Colors.RESET}")
             else:
                 print(f"{prov.name} has no owner.")
             return
@@ -259,7 +269,10 @@ def DisplayProvinceOwner(province_objects, prov_name):
 def DisplayTroopStatus(province_objects):
     for prov in province_objects:
         if prov.owner:
-            print(f"{prov.name}: Infantry={prov.infantry}, Tank={prov.tank}, Commando={prov.commando} | Owner: {prov.owner.name}")
+            color_code = prov.owner.ansi_color
+            print(f"{color_code}{prov.name}: Infantry={prov.infantry}, Tank={prov.tank}, Commando={prov.commando} | Owner: {prov.owner.name}{Colors.RESET}")
+        else:
+            print(f"{prov.name}: Infantry={prov.infantry}, Tank={prov.tank}, Commando={prov.commando} | No owner")
 
 # ==================== SETUP ====================
 def GetNumPlayers():
