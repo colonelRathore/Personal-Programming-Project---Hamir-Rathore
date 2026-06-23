@@ -289,35 +289,28 @@ def GetPlayersColors(player_names):
     return colors
 
 def ClaimProvince(players, province_objects):
-    # Shuffle provinces for random distribution
+    """Randomly assign provinces to players"""
     import random
     random.shuffle(PROVINCES)
     
     num_players = len(players)
     provinces_per_player = len(PROVINCES) // num_players
-    extra_provinces = len(PROVINCES) % num_players
+    extra = len(PROVINCES) % num_players
     
-    province_index = 0
-    
+    idx = 0
     print("\n=== Randomly Assigning Provinces ===\n")
     
     for i, player in enumerate(players):
-        # Give base number of provinces
-        num_to_give = provinces_per_player + (1 if i < extra_provinces else 0)
-        
+        num_to_give = provinces_per_player + (1 if i < extra else 0)
         for _ in range(num_to_give):
-            if province_index < len(PROVINCES):
-                prov_name = PROVINCES[province_index]
-                # Find the Province object
-                prov_obj = next((p for p in province_objects if p.name == prov_name), None)
-                if prov_obj:
-                    # Create Player object with color
-                    player_obj = next((pl for pl in players if pl.name == player), None)
-                    if player_obj:
-                        prov_obj.owner = player_obj
-                        player_obj.provinces.append(prov_obj)
-                        print(f"{prov_obj.name} assigned to {player}")
-                province_index += 1
+            if idx < len(PROVINCES):
+                prov_name = PROVINCES[idx]
+                prov = next((p for p in province_objects if p.name == prov_name), None)
+                if prov:
+                    prov.owner = player
+                    player.provinces.append(prov)
+                    print(f"{prov.name} assigned to {player.name}")
+                idx += 1
 
 # ==================== ACTIONS ====================
 def is_adjacent(prov1, prov2):
@@ -359,22 +352,16 @@ def RecruitSoldiers():
         print("Extra troops recruited!")
 
 # ==================== MAIN ====================
-def main():
-    load_soldiers()
-    load_title()
-    num_players = GetNumPlayers()
-    player_names = FetchPlayerNames(num_players)
-    player_colors = GetPlayersColors(player_names)
-    
+def main(player_names, player_colors):
     players = [Player(name, color) for name, color in zip(player_names, player_colors)]
     province_objects = [Province(name) for name in PROVINCES]
     
-    ClaimProvince(players, province_objects)
+    ClaimProvince(players, province_objects)   # <-- Fixed call
     
     print("\n=== GAME START ===")
     turn = 0
     while True:
-        current = players[turn % num_players]
+        current = players[turn % len(players)]
         print(f"\n{current.name}'s Turn!")
         DisplayMap()
         DisplayTroopStatus(province_objects)
