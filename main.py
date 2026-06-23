@@ -354,11 +354,22 @@ def RecruitSoldiers():
         print("Extra troops recruited!")
 
 # ==================== MAIN ====================
-def main(player_names, player_colors):
+def main():
+    load_soldiers()
+    load_title()
+    
+    num_players = GetNumPlayers()
+    player_names = FetchPlayerNames(num_players)
+    player_colors = GetPlayersColors(player_names)
+    
+    # Create Player objects with colors
     players = [Player(name, color) for name, color in zip(player_names, player_colors)]
+    
+    # Create Province objects
     province_objects = [Province(name) for name in PROVINCES]
     
-    ClaimProvince(players, province_objects)   # <-- Fixed call
+    # Randomly assign provinces
+    ClaimProvince(players, province_objects)
     
     print("\n=== GAME START ===")
     turn = 0
