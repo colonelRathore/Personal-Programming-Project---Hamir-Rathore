@@ -99,7 +99,8 @@ ADJACENCY = {
 class Player:
     def __init__(self, name, color):
         self.name = name
-        self.color = color
+        self.color = color.lower() if color else "default"
+        self.ansi_color = COLOR_MAP.get(self.color, Colors.CYAN)
         self.provinces = []
 
 class Province:
