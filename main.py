@@ -1,11 +1,28 @@
 import random
 
-# ANSI Colors 
-class BgColor:
-    CYAN = "\033[46m"  
-    OFF = "\033[0m"     # Reset color
 
-COLOR_AVAILABLE = True
+# ANSI Colors for players
+class Colors:
+    RESET = "\033[0m"
+    CYAN = "\033[46m"      # Background cyan
+    RED = "\033[41m"       # Background red
+    GREEN = "\033[42m"     # Background green
+    YELLOW = "\033[43m"    # Background yellow
+    BLUE = "\033[44m"      # Background blue
+    MAGENTA = "\033[45m"   # Background magenta
+    WHITE = "\033[47m"     # Background white
+
+# Map player color names to ANSI codes
+COLOR_MAP = {
+    "red": Colors.RED,
+    "green": Colors.GREEN,
+    "blue": Colors.BLUE,
+    "yellow": Colors.YELLOW,
+    "cyan": Colors.CYAN,
+    "magenta": Colors.MAGENTA,
+    "white": Colors.WHITE,
+    "default": Colors.CYAN
+}
 
 try:
     from playsound import playsound
@@ -75,7 +92,8 @@ ADJACENCY = {
 class Player:
     def __init__(self, name, color):
         self.name = name
-        self.color = color
+        self.color = color.lower()  # Store color name
+        self.ansi_color = COLOR_MAP.get(self.color, Colors.CYAN)
         self.provinces = []
 
 class Province:
