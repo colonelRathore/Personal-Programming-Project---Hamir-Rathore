@@ -59,7 +59,7 @@ PROVINCES = [
 
 # Basic Adjacency Logic (RISK-style connections)
 ADJACENCY = {
-    "Alaska": ["Northwestern Territories", "Pacific Coast"],
+    "Alaska": ["Northwestern Territories", "Pacific Coast", "Columbia"],
     "Columbia": ["Alaska", "Northwestern Territories", "Pacific Coast"],
     "Northwestern Territories": ["Alaska", "Columbia", "Prairies", "Hudsonia"],
     "Prairies": ["Northwestern Territories", "Great Plains", "Hudsonia"],
@@ -69,31 +69,28 @@ ADJACENCY = {
     "Lower Canada": ["Upper Canada", "Northern Quebec", "Atlantic Coast"],
     "Newfoundland": ["Northern Quebec", "Greenland"],
     "Greenland": ["Newfoundland", "Iceland"],
-    "Southeastern United States": ["Atlantic Coast", "Midwest"],
+    "Iceland": ["Greenland", "Scandinavia"],
+    "Southeastern United States": ["Atlantic Coast", "Midwest", "Carribean"],
     "Midwest": ["Southeastern United States", "Great Plains"],
     "Great Plains": ["Prairies", "Midwest", "Rocky Mountains"],
     "Rocky Mountains": ["Great Plains", "Pacific Coast"],
-    "Pacific Coast": ["Alaska", "Columbia", "Rocky Mountains"],
+    "Pacific Coast": ["Alaska", "Columbia", "Rocky Mountains", "Mexico"],
     "Atlantic Coast": ["Lower Canada", "Southeastern United States"],
-    "Mexico": ["Pacific Coast", "Central America"],
+    "Mexico": ["Pacific Coast", "Central America", "Carribean"],
     "Central America": ["Mexico", "Colombia"],
-    "Colombia": ["Central America", "Guyana"],
+    "Colombia": ["Central America", "Guyana", "Peru"],
     "Guyana": ["Colombia", "Brazil"],
     "Peru": ["Colombia", "Amazonia", "Brazil"],
     "Amazonia": ["Peru", "Brazil"],
     "Brazil": ["Guyana", "Peru", "Amazonia", "Argentina"],
     "Argentina": ["Brazil"],
     "Carribean": ["Mexico", "Atlantic Coast"],
-    # Europe / Asia connections (simplified)
-    "Iceland": ["Greenland", "Scandinavia"],
     "Scandinavia": ["Iceland", "The Baltics"],
     "The Baltics": ["Scandinavia", "Poland", "Muscovy"],
     "Poland": ["The Baltics", "Eastern Germany", "Ruthenia"],
     "Muscovy": ["The Baltics", "Novogrod", "Eastern Muscovy"],
-    # Add more as needed for basic gameplay
-    "China": ["Mongolia", "Xinjiang", "Tibet", "Indochina"],
-    "Japan": ["Korea"],
-    "Australia regions": ["New Guinea", "Western Australia", "Queensland"]  # grouped for simplicity
+    "China": ["Mongolia", "Xinjiang", "Tibet", "Indochina", "Korea"],
+    "Japan": ["Korea"]
 }
 
 class Player:
@@ -317,33 +314,66 @@ def ClaimProvince(players, province_objects):
 
 # ==================== ACTIONS ====================
 def is_adjacent(prov1, prov2):
-    if prov1 in ADJACENCY and prov2 in ADJACENCY[prov1]:
-        return True
-    return prov2 in ADJACENCY and prov1 in ADJACENCY[prov2]
+    """Improved adjacency check"""
+    if not prov1 or not prov2:
+        return False
+    p1 = prov1.strip().lower()
+    p2 = prov2.strip().lower()
+    
+    for name, neighbors in ADJACENCY.items():
+        if name.lower() == p1 and any(n.lower() == p2 for n in neighbors):
+            return True
+        if name.lower() == p2 and any(n.lower() == p1 for n in neighbors):
+            return True
+    return False
 
 def LaunchAttack(current_player, province_objects):
-    print("Launching Attack!")
-    DisplayProvinces()
-    from_prov = input("Attack from which province? ")
-    to_prov = input("Attack which province? ")
+    print("\n=== Launching Attack ===")
+    DisplayTroopStatus(province_objects)  # Show current status
     
-    from_p = next((p for p in province_objects if p.name == from_prov and p.owner and p.owner.name == current_player.name), None)
-    to_p = next((p for p in province_objects if p.name == to_prov), None)
+    from_prov = input("Attack from which province? ").strip()
+    to_prov = input("Attack which province? ").strip()
     
-    if not from_p or not to_p or not to_p.owner or to_p.owner.name == current_player.name:
-        print("Invalid attack.")
+    if not from_prov or not to_prov:
+        print("Please enter province names.")
+        return
+    
+    # Find attacking province (must be owned by current player)
+    from_p = next((p for p in province_objects 
+                   if p.name.lower() == from_prov.lower() 
+                   and p.owner == current_player), None)
+    
+    # Find target province
+    to_p = next((p for p in province_objects 
+                 if p.name.lower() == to_prov.lower()), None)
+    
+    if not from_p:
+        print(f"You do not own '{from_prov}' or it doesn't exist.")
+        return
+    if not to_p:
+        print(f"Province '{to_prov}' not found.")
+        return
+    if not to_p.owner or to_p.owner == current_player:
+        print("You cannot attack your own or neutral province.")
         return
     if not is_adjacent(from_prov, to_prov):
-        print("Provinces are not adjacent!")
+        print(f"'{from_prov}' and '{to_prov}' are not adjacent!")
+        print("Tip: Check the ADJACENCY dictionary or try different provinces.")
         return
     
+    # Combat
     attack_roll = random.randint(1,6) + random.randint(1,6)
     defend_roll = random.randint(1,6) + random.randint(1,6)
-    print(f"Attack roll: {attack_roll} | Defense roll: {defend_roll}")
+    print(f"Attack roll: {attack_roll}  |  Defense roll: {defend_roll}")
     
     if attack_roll > defend_roll:
-        print("Victory! Province captured.")
+        print(f"\nVICTORY! {to_prov} captured!")
+        # Transfer ownership
+        old_owner = to_p.owner
         to_p.owner = current_player
+        current_player.provinces.append(to_p)
+        if old_owner and to_p in old_owner.provinces:
+            old_owner.provinces.remove(to_p)
     else:
         print("Attack failed.")
 
